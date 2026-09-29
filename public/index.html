@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyScope · Precision Weather & Geocoding Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0c1e3d; color: #f8fafc; min-height: 100vh; }
+  </style>
+</head>
+<body class="p-6 flex flex-col justify-between">
+  <header class="w-full max-w-3xl mx-auto flex items-center justify-between py-2">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center text-white font-bold">SS</div>
+      <span class="text-sm font-black tracking-wider text-white uppercase">SkyScope</span>
+    </div>
+  </header>
+
+  <main class="w-full max-w-3xl mx-auto py-6 space-y-6">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl font-extrabold text-white">Eksplorasi Wilayah Geografis</h1>
+      <p class="text-slate-400 text-sm">Ketik nama lokasi untuk mengekstrak data wilayah dan koordinat.</p>
+    </div>
+
+    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700 space-y-4">
+      <div class="relative flex items-center">
+        <input type="text" id="locationInput" placeholder="Ketik lokasi... (contoh: Kasihan, Bantul, Purworejo)" class="w-full px-4 py-3.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm" />
+        <button id="btnSearch" class="absolute right-2 px-5 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs">ANALISIS</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
