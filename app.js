@@ -22,12 +22,13 @@ app.get("/api/lokasi", async (req, res) => {
 
     const feature = data.features[0];
     const [lon, lat] = feature.geometry.coordinates;
+    const placeTypes = feature.place_type || [];
 
     let country = "-";
     let province = "-";
     let district = "-";
 
-    // Ekstrak hierarki dari objek context
+    // 1. Ekstrak data hierarki dari context
     if (feature.context && Array.isArray(feature.context)) {
       feature.context.forEach((item) => {
         if (item.id.startsWith("country")) country = item.text;
@@ -43,6 +44,19 @@ app.get("/api/lokasi", async (req, res) => {
           district = item.text;
         }
       });
+    }
+
+    // 2. Evaluasi tipe entitas utama
+    if (placeTypes.includes("country")) {
+      country = feature.text;
+      province = "-";
+      district = "-";
+    } else if (
+      placeTypes.includes("region") ||
+      placeTypes.includes("province")
+    ) {
+      province = feature.text;
+      district = "-";
     }
 
     res.json({
