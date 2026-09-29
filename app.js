@@ -7,6 +7,7 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// Endpoint Geocoding Dinamis MapTiler
 app.get("/api/lokasi", async (req, res) => {
   const kota = req.query.q || "Kasihan";
   const apiKey = "cwKFPH9KLLokX8G9txlx";
@@ -28,7 +29,7 @@ app.get("/api/lokasi", async (req, res) => {
     let province = "-";
     let district = "-";
 
-    // 1. Ekstrak data hierarki dari context
+    // 1. Ekstrak data hierarki dari context (entitas induk di atasnya)
     if (feature.context && Array.isArray(feature.context)) {
       feature.context.forEach((item) => {
         if (item.id.startsWith("country")) country = item.text;
@@ -46,7 +47,7 @@ app.get("/api/lokasi", async (req, res) => {
       });
     }
 
-    // 2. Evaluasi tipe entitas utama
+    // 2. Evaluasi tipe entitas utama yang dicari
     if (placeTypes.includes("country")) {
       country = feature.text;
       province = "-";
@@ -57,11 +58,23 @@ app.get("/api/lokasi", async (req, res) => {
     ) {
       province = feature.text;
       district = "-";
+    } else if (
+      placeTypes.includes("natural") ||
+      placeTypes.includes("island") ||
+      placeTypes.includes("continent")
+    ) {
+      district = "-";
+    } else {
+      // Jika yang dicari setingkat kecamatan/kota/desa (seperti Kasihan, Bantul, Purworejo)
+      if (district === "-") {
+        district = feature.text;
+      }
     }
 
     res.json({
       query: kota,
       lokasi: feature.text || kota,
+      nama_lengkap: feature.place_name,
       negara: country,
       provinsi: province,
       kecamatan: district,
@@ -72,7 +85,10 @@ app.get("/api/lokasi", async (req, res) => {
     });
   } catch (error) {
     console.error("Error MapTiler API:", error.message);
-    res.status(500).json({ message: "Gagal mengambil data dari MapTiler" });
+    res.status(500).json({
+      message: "Gagal mengambil data dari MapTiler",
+      error: error.message,
+    });
   }
 });
 
