@@ -23,9 +23,34 @@ app.get("/api/lokasi", async (req, res) => {
     const feature = data.features[0];
     const [lon, lat] = feature.geometry.coordinates;
 
+    let country = "-";
+    let province = "-";
+    let district = "-";
+
+    // Ekstrak hierarki dari objek context
+    if (feature.context && Array.isArray(feature.context)) {
+      feature.context.forEach((item) => {
+        if (item.id.startsWith("country")) country = item.text;
+        if (item.id.startsWith("region") || item.id.startsWith("province")) {
+          province = item.text;
+        }
+        if (
+          item.id.startsWith("subregion") ||
+          item.id.startsWith("district") ||
+          item.id.startsWith("locality") ||
+          item.id.startsWith("municipality")
+        ) {
+          district = item.text;
+        }
+      });
+    }
+
     res.json({
       query: kota,
       lokasi: feature.text || kota,
+      negara: country,
+      provinsi: province,
+      kecamatan: district,
       koordinat: {
         longitude: lon,
         latitude: lat,
