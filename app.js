@@ -65,7 +65,7 @@ app.get("/api/lokasi", async (req, res) => {
     ) {
       district = "-";
     } else {
-      // Jika yang dicari setingkat kecamatan/kota/desa (seperti Kasihan, Bantul, Purworejo)
+      
       if (district === "-") {
         district = feature.text;
       }
